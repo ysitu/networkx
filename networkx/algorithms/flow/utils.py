@@ -9,6 +9,7 @@ __author__ = """ysitu <ysitu@users.noreply.github.com>"""
 # BSD license.
 
 from collections import deque
+from itertools import chain, tee
 import networkx as nx
 
 __all__ = ['CurrentEdge', 'Level', 'GlobalRelabelThreshold',
@@ -24,7 +25,7 @@ class CurrentEdge(object):
     def __init__(self, edges):
         self._edges = edges
         if self._edges:
-            self._rewind()
+            self.rewind()
 
     def get(self):
         return self._curr
@@ -33,10 +34,14 @@ class CurrentEdge(object):
         try:
             self._curr = next(self._it)
         except StopIteration:
-            self._rewind()
+            self.rewind()
             raise
 
-    def _rewind(self):
+    def tee(self):
+        self._it, it = tee(self._it)
+        return chain([self._curr], it)
+
+    def rewind(self):
         self._it = iter(self._edges.items())
         self._curr = next(self._it)
 

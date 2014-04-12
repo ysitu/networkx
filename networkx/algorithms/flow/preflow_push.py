@@ -108,6 +108,40 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
         return min(R_node[v]['height'] for v, attr in R_succ[u].items()
                    if attr['flow'] < attr['capacity']) + 1
 
+    def inner_discharge(u, force_relabel):
+        """Discharge a node until it becomes inactive or is relabeled. Return
+        True if the node is active at exit.
+        """
+        height = R_node[u]['height']
+        curr_edge = R_node[u]['curr_edge']
+        levels[height].active.remove(u)
+        if R_node[u]['excess'] > 0:
+            while True:
+                v, attr = curr_edge.get()
+                if (height == R_node[v]['height'] + 1 and
+                    attr['flow'] < attr['capacity']):
+                    flow = min(R_node[u]['excess'],
+                               attr['capacity'] - attr['flow'])
+                    push(u, v, flow)
+                    activate(v)
+                    if R_node[u]['excess'] == 0:
+                        if force_relabel:
+                            break
+                        levels[height].inactive.add(u)
+                        return False
+                try:
+                    curr_edge.move_to_next()
+                except StopIteration:
+                    height = relabel(u)
+                    levels[height].active.add(u)
+                    R_node[u]['height'] = height
+                    return True
+        height = relabel(u)
+        curr_edge.rewind()
+        levels[height].inactive.add(u)
+        R_node[u]['height'] = height
+        return False
+
     def discharge(u, is_phase1):
         """Discharge a node until it becomes inactive or, during phase 1 (see
         below), its height reaches at least n. The node is known to have the
@@ -125,8 +159,30 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
                 attr['flow'] < attr['capacity']):
                 flow = min(R_node[u]['excess'],
                            attr['capacity'] - attr['flow'])
-                push(u, v, flow)
-                activate(v)
+                if v != s and v != t:
+                    # Calculate the amount of flow to push to v such that if v
+                    # is inactive, it will not stay active after an immediately
+                    # discharge.
+                    D = flow + R_node[v]['excess']
+                    C = 0
+                    height_v = R_node[v]['height']
+                    for w, attr in R_node[v]['curr_edge'].tee():
+                        if height_v == R_node[w]['height'] + 1:
+                            C += attr['capacity'] - attr['flow']
+                            if C >= D:
+                                break
+                    # If force_relabel is True, v will have no more admissible
+                    # edges and needs to relabeled after discharging.
+                    force_relabel = C < D
+                    if R_node[v]['excess'] == 0:
+                        flow = min(flow, max(C - R_node[v]['excess'], 0))
+                    push(u, v, flow)
+                    activate(v)
+                    if (inner_discharge(v, force_relabel) and
+                        (not is_phase1 or R_node[v]['height'] < n)):
+                        next_height = max(next_height, R_node[v]['height'])
+                else:
+                    push(u, v, flow)
                 if R_node[u]['excess'] == 0:
                     # The node has become inactive.
                     levels[height].inactive.add(u)
@@ -137,6 +193,7 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
                 # We have run off the end of the adjacency list, and there can
                 # be no more admissible edges. Relabel the node to create one.
                 height = relabel(u)
+                R_node[u]['height'] = height
                 if is_phase1 and height >= n - 1:
                     # Although the node is still active, with a height at least
                     # n - 1, it is now known to be on the s side of the minimum
@@ -147,8 +204,7 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
                 # increase the height of the node since the 'current edge' data
                 # structure is not rewound. Use height instead of (height - 1)
                 # in case other active nodes at the same level are missed.
-                next_height = height
-        R_node[u]['height'] = height
+                next_height = max(next_height, height)
         return next_height
 
     def gap_heuristic(height):
