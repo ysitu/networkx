@@ -105,8 +105,11 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
         """Relabel a node to create an admissible edge.
         """
         grt.add_work(len(R_succ[u]))
-        return min(R_node[v]['height'] for v, attr in R_succ[u].items()
-                   if attr['flow'] < attr['capacity']) + 1
+        height = 2 * n - 3
+        for v, attr in R_succ[u].items():
+            if attr['flow'] < attr['capacity']:
+                height = min(height, R_node[v]['height'])
+        return height + 1
 
     def discharge(u, is_phase1):
         """Discharge a node until it becomes inactive or, during phase 1 (see
@@ -114,41 +117,61 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
         largest height among active nodes.
         """
         height = R_node[u]['height']
-        curr_edge = R_node[u]['curr_edge']
         # next_height represents the next height to examine after discharging
         # the current node. During phase 1, it is capped to below n.
         next_height = height
         levels[height].active.remove(u)
+        path = [(u, R_node[u]['excess'])]
+        v = u
         while True:
-            v, attr = curr_edge.get()
-            if (height == R_node[v]['height'] + 1 and
-                attr['flow'] < attr['capacity']):
-                flow = min(R_node[u]['excess'],
-                           attr['capacity'] - attr['flow'])
-                push(u, v, flow)
+            height = R_node[v]['height']
+            curr_edge = R_node[v]['curr_edge']
+            while True:
+                w, attr = curr_edge.get()
+                if height == R_node[w]['height'] + 1:
+                    flow = attr['capacity'] - attr['flow']
+                    if flow > 0:
+                        path.append((w, min(flow, path[-1][1])))
+                        v = w
+                        break
+                try:
+                    curr_edge.move_to_next()
+                except StopIteration:
+                    old_height = height
+                    height = relabel(v)
+                    R_node[v]['height'] = height
+                    if R_node[v]['excess'] > 0:
+                        if not is_phase1 or height < n:
+                            next_height = max(next_height, height)
+                        if v != u:
+                            levels[old_height].active.remove(v)
+                            levels[height].active.add(v)
+                    else:
+                        levels[old_height].inactive.remove(v)
+                        levels[height].inactive.add(v)
+                    if v != u:
+                        path.pop()
+                        v = path[-1][0]
+                        break
+            if is_phase1 and R_node[u]['height'] >= n - 1:
+                break
+            if v == s or v == t or len(path) >= 5:
+                flow = path[-1][1]
+                it = iter(path)
+                v, _ = next(it)
+                for w, _ in it:
+                    R_succ[v][w]['flow'] += flow
+                    R_succ[w][v]['flow'] -= flow
+                    v = w
+                excess = R_node[u]['excess'] - flow
+                R_node[u]['excess'] = excess
+                R_node[v]['excess'] += flow
                 activate(v)
-                if R_node[u]['excess'] == 0:
-                    # The node has become inactive.
-                    levels[height].inactive.add(u)
+                if excess == 0:
                     break
-            try:
-                curr_edge.move_to_next()
-            except StopIteration:
-                # We have run off the end of the adjacency list, and there can
-                # be no more admissible edges. Relabel the node to create one.
-                height = relabel(u)
-                if is_phase1 and height >= n - 1:
-                    # Although the node is still active, with a height at least
-                    # n - 1, it is now known to be on the s side of the minimum
-                    # s-t cut. Stop processing it until phase 2.
-                    levels[height].active.add(u)
-                    break
-                # The first relabel operation after global relabeling may not
-                # increase the height of the node since the 'current edge' data
-                # structure is not rewound. Use height instead of (height - 1)
-                # in case other active nodes at the same level are missed.
-                next_height = height
-        R_node[u]['height'] = height
+                path = [(u, excess)]
+                v = u
+        levels[R_node[u]['height']].inactive.add(u)
         return next_height
 
     def gap_heuristic(height):
