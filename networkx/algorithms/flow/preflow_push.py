@@ -144,7 +144,7 @@ def preflow_push_impl(G, s, t, capacity, max_path_length, global_relabel_freq,
                     height = relabel(v)
                     R_node[v]['height'] = height
                     if R_node[v]['excess'] > 0:
-                        if not is_phase1 or height < n:
+                        if not is_phase1 or height < n - 1:
                             next_height = max(next_height, height)
                         if v != u:
                             levels[old_height].active.remove(v)
@@ -157,7 +157,8 @@ def preflow_push_impl(G, s, t, capacity, max_path_length, global_relabel_freq,
                         v = path[-1][0]
                         break
             if is_phase1 and R_node[u]['height'] >= n - 1:
-                break
+                levels[R_node[u]['height']].active.add(u)
+                return next_height
             if v == s or v == t or len(path) > max_path_length:
                 flow = path[-1][1]
                 it = iter(path)
