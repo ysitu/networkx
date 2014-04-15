@@ -18,9 +18,12 @@ __all__ = ['preflow_push',
            'preflow_push_flow']
 
 
-def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
+def preflow_push_impl(G, s, t, capacity, max_path_length, global_relabel_freq,
+                      compute_flow):
     """Implementation of the highest-label preflow-push algorithm.
     """
+    if max_path_length <= 0:
+        raise nx.NetworkXError('max_path_length must be positive.')
     if global_relabel_freq is None:
         global_relabel_freq = 0
     if global_relabel_freq < 0:
@@ -155,7 +158,7 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
                         break
             if is_phase1 and R_node[u]['height'] >= n - 1:
                 break
-            if v == s or v == t or len(path) >= 5:
+            if v == s or v == t or len(path) > max_path_length:
                 flow = path[-1][1]
                 it = iter(path)
                 v, _ = next(it)
@@ -290,7 +293,8 @@ def preflow_push_impl(G, s, t, capacity, global_relabel_freq, compute_flow):
     return R
 
 
-def preflow_push(G, s, t, capacity='capacity', global_relabel_freq=1):
+def preflow_push(G, s, t, capacity='capacity', max_path_length=4,
+                 global_relabel_freq=1):
     """Find a maximum single-commodity flow using the highest-label
     preflow-push algorithm.
 
@@ -316,6 +320,9 @@ def preflow_push(G, s, t, capacity='capacity', global_relabel_freq=1):
         that indicates how much flow the edge can support. If this
         attribute is not present, the edge is considered to have
         infinite capacity. Default value: 'capacity'.
+
+    max_path_length : int
+        Maximum length of partial augmenting paths. Default value: 4.
 
     global_relabel_freq : integer, float
         Relative frequency of applying the global relabeling heuristic to speed
@@ -359,11 +366,13 @@ def preflow_push(G, s, t, capacity='capacity', global_relabel_freq=1):
     >>> flow, F['a']['c']
     (3.0, 2.0)
     """
-    R = preflow_push_impl(G, s, t, capacity, global_relabel_freq, True)
+    R = preflow_push_impl(G, s, t, capacity, max_path_length,
+                          global_relabel_freq, True)
     return (R.node[t]['excess'], build_flow_dict(G, R))
 
 
-def preflow_push_value(G, s, t, capacity='capacity', global_relabel_freq=1):
+def preflow_push_value(G, s, t, capacity='capacity', max_path_length=4,
+                       global_relabel_freq=1):
     """Find a maximum single-commodity flow using the highest-label
     preflow-push algorithm.
 
@@ -389,6 +398,9 @@ def preflow_push_value(G, s, t, capacity='capacity', global_relabel_freq=1):
         that indicates how much flow the edge can support. If this
         attribute is not present, the edge is considered to have
         infinite capacity. Default value: 'capacity'.
+
+    max_path_length : int
+        Maximum length of partial augmenting paths. Default value: 4.
 
     global_relabel_freq : integer, float
         Relative frequency of applying the global relabeling heuristic to speed
@@ -428,11 +440,13 @@ def preflow_push_value(G, s, t, capacity='capacity', global_relabel_freq=1):
     >>> flow
     3.0
     """
-    R = preflow_push_impl(G, s, t, capacity, global_relabel_freq, False)
+    R = preflow_push_impl(G, s, t, capacity, max_path_length,
+                          global_relabel_freq, False)
     return R.node[t]['excess']
 
 
-def preflow_push_flow(G, s, t, capacity='capacity', global_relabel_freq=1):
+def preflow_push_flow(G, s, t, capacity='capacity', max_path_length=4,
+                      global_relabel_freq=1):
     """Find a maximum single-commodity flow using the highest-label
     preflow-push algorithm.
 
@@ -458,6 +472,9 @@ def preflow_push_flow(G, s, t, capacity='capacity', global_relabel_freq=1):
         that indicates how much flow the edge can support. If this
         attribute is not present, the edge is considered to have
         infinite capacity. Default value: 'capacity'.
+
+    max_path_length : int
+        Maximum length of partial augmenting paths. Default value: 4.
 
     global_relabel_freq : integer, float
         Relative frequency of applying the global relabeling heuristic to speed
@@ -498,5 +515,6 @@ def preflow_push_flow(G, s, t, capacity='capacity', global_relabel_freq=1):
     >>> F['a']['c']
     2.0
     """
-    R = preflow_push_impl(G, s, t, capacity, global_relabel_freq, True)
+    R = preflow_push_impl(G, s, t, capacity, max_path_length,
+                          global_relabel_freq, True)
     return build_flow_dict(G, R)
