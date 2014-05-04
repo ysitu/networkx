@@ -12,7 +12,11 @@ import os
 import sys
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 
-from distutils.core import setup
+from setuptools import setup, Extension
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    cythonize = None
 
 if sys.argv[-1] == 'setup.py':
     print("To install, run 'python setup.py install'")
@@ -31,6 +35,7 @@ sys.path.pop(0)
 
 packages=["networkx",
           "networkx.algorithms",
+          "networkx.algorithms.approximation",
           "networkx.algorithms.assortativity",
           "networkx.algorithms.bipartite",
           "networkx.algorithms.centrality",
@@ -39,29 +44,55 @@ packages=["networkx",
           "networkx.algorithms.components",
           "networkx.algorithms.connectivity",
           "networkx.algorithms.flow",
-          "networkx.algorithms.traversal",
           "networkx.algorithms.isomorphism",
-          "networkx.algorithms.shortest_paths",
           "networkx.algorithms.link_analysis",
           "networkx.algorithms.operators",
-          "networkx.algorithms.approximation",
+          "networkx.algorithms.partition",
+          "networkx.algorithms.shortest_paths",
+          "networkx.algorithms.traversal",
           "networkx.algorithms.tree",
           "networkx.classes",
+          "networkx.drawing",
           "networkx.external",
           "networkx.external.decorator",
+          "networkx.external.metis",
           "networkx.generators",
-          "networkx.drawing",
           "networkx.linalg",
           "networkx.readwrite",
           "networkx.readwrite.json_graph",
-          "networkx.tests",
           "networkx.testing",
+          "networkx.tests",
           "networkx.utils"]
 
-if sys.version >= '3':
+if sys.version_info[0] >= 3:
     packages.append('networkx.external.decorator.decorator3')
 else:
     packages.append('networkx.external.decorator.decorator2')
+
+if cythonize:
+    libraries = [('gklib',
+                  {'sources': glob('networkx/external/metis/src/GKlib/*.c'),
+                   'depends': glob('networkx/external/metis/src/GKlib/*.h'),
+                   'include_dirs': ['networkx/external/metis/src/GKlib']}),
+                 ('metis',
+                  {'sources': glob('networkx/external/metis/src/libmetis/*.c'),
+                   'depends': glob('networkx/external/metis/src/libmetis/*.h'),
+                   'include_dirs': ['networkx/external/metis/src/GKlib',
+                                    'networkx/external/metis/src/libmetis']})]
+    ext_modules = cythonize([Extension(
+        'networkx.external.metis._metis',
+        ['networkx/external/metis/*.pyx'],
+        include_dirs=['networkx/external/metis/src/GKlib',
+                      'networkx/external/metis/src/libmetis'],
+        libraries=['metis', 'gklib'])])
+else:
+    libraries = None
+    ext_modules = None
+
+if sys.version_info[:2] < (3, 4):
+    install_requires = ['enum34']
+else:
+    install_requires = None
 
 docdirbase  = 'share/doc/networkx-%s' % version
 # add basic documentation
@@ -88,6 +119,7 @@ for d in ['advanced',
 package_data     = {
     'networkx': ['tests/*.py'],
     'networkx.algorithms': ['tests/*.py'],
+    'networkx.algorithms.approximation': ['tests/*.py'],
     'networkx.algorithms.assortativity': ['tests/*.py'],
     'networkx.algorithms.bipartite': ['tests/*.py'],
     'networkx.algorithms.centrality': ['tests/*.py'],
@@ -96,17 +128,17 @@ package_data     = {
     'networkx.algorithms.components': ['tests/*.py'],
     'networkx.algorithms.connectivity': ['tests/*.py'],
     'networkx.algorithms.flow': ['tests/*.py', 'tests/*.bz2'],
-    'networkx.algorithms.traversal': ['tests/*.py'],
     'networkx.algorithms.isomorphism': ['tests/*.py','tests/*.*99'],
     'networkx.algorithms.link_analysis': ['tests/*.py'],
-    'networkx.algorithms.approximation': ['tests/*.py'],
     'networkx.algorithms.operators': ['tests/*.py'],
+    'networkx.algorithms.partition': ['tests/*.py'],
     'networkx.algorithms.shortest_paths': ['tests/*.py'],
     'networkx.algorithms.traversal': ['tests/*.py'],
     'networkx.algorithms.tree': ['tests/*.py'],
     'networkx.classes': ['tests/*.py'],
-    'networkx.generators': ['tests/*.py'],
     'networkx.drawing': ['tests/*.py'],
+    'networkx.external.metis': ['tests/*.py'],
+    'networkx.generators': ['tests/*.py'],
     'networkx.linalg': ['tests/*.py'],
     'networkx.readwrite': ['tests/*.py'],
     'networkx.readwrite.json_graph': ['tests/*.py'],
@@ -132,7 +164,10 @@ if __name__ == "__main__":
         download_url     = release.download_url,
         classifiers      = release.classifiers,
         packages         = packages,
+        libraries        = libraries,
+        ext_modules      = ext_modules,
         data_files       = data,
-        package_data     = package_data
+        package_data     = package_data,
+        install_requires = install_requires
       )
 

@@ -2,6 +2,7 @@ import sys
 
 from collections import defaultdict
 from os.path import splitext
+from sys import exc_info, version_info
 
 import networkx as nx
 from networkx.external.decorator import decorator
@@ -10,6 +11,7 @@ from networkx.utils import is_string_like
 __all__ = [
     'not_implemented_for',
     'open_file',
+    'convert_exceptions'
 ]
 
 def not_implemented_for(*graph_types):
@@ -225,3 +227,53 @@ def open_file(path_arg, mode='r'):
         return result
 
     return _open_file
+
+
+def _exec(code, gvars, lvars):
+    exec(code, gvars, lvars)
+
+
+def convert_exceptions(convert_type, catch_types=None):
+    """Decorator to convert types of exceptions
+
+    Parameters
+    ----------
+    convert_type : subclass of Exception
+        Target type to convert to.
+
+    catch_types : tuple of subclasses of Exception, optional
+        Source types whose instances are to be caught and converted. If None,
+        all instances of Exception will be caught and converted.
+
+    Returns
+    -------
+    _convert_exceptions : function
+        Function that performs exception type conversion.
+
+    Example
+    -------
+    Decorate functions like this::
+
+        @convert_exceptions(nx.NetworkXError, (ValueError,))
+        def function():
+            pass
+    """
+    @decorator
+    def _convert_exceptions(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except catch_types or () as e:
+            exc = e
+        except Exception as e:
+            if catch_types is not None:
+                raise
+            exc = e
+        gvars = globals()
+        lvars = locals()
+        lvars['convert_type'] = convert_type
+        if version_info[0] >= 3:
+            code = 'raise convert_type(exc).with_traceback(exc.__traceback__)'
+        else:
+            code = 'raise convert_type, (exc,), exc_info()[2]'
+        _exec(code, gvars, lvars)
+    return _convert_exceptions

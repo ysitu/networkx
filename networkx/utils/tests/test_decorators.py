@@ -4,13 +4,15 @@ import os
 from nose.tools import *
 
 import networkx as nx
-from networkx.utils.decorators import open_file,not_implemented_for
+from networkx.utils.decorators import *
+
 
 def test_not_implemented_decorator():
     @not_implemented_for('directed')
     def test1(G):
         pass
     test1(nx.Graph())
+
 
 @raises(KeyError)
 def test_not_implemented_decorator_key():
@@ -19,13 +21,13 @@ def test_not_implemented_decorator_key():
         pass
     test1(nx.Graph())
 
+
 @raises(nx.NetworkXNotImplemented)
 def test_not_implemented_decorator_raise():
     @not_implemented_for('graph')
     def test1(G):
         pass
     test1(nx.Graph())
-
 
 
 class TestOpenFileDecorator(object):
@@ -146,3 +148,25 @@ class TestOpenFileDecorator(object):
 
     def tearDown(self):
         self.fobj.close()
+
+
+class TestConvertExceptions(object):
+
+    @raises(nx.NetworkXError)
+    @convert_exceptions(nx.NetworkXError, (ValueError,))
+    def test_convert(self):
+        raise ValueError('')
+
+    @raises(nx.NetworkXError)
+    @convert_exceptions(nx.NetworkXError)
+    def test_convert_all(self):
+        raise nx.NetworkXNotImplement('')
+
+    @raises(TypeError)
+    @convert_exceptions(nx.NetworkXError, (ValueError,))
+    def test_fall_through(self):
+        raise TypeError('')
+
+    @convert_exceptions(nx.NetworkXError)
+    def test_no_exceptions(self):
+        pass

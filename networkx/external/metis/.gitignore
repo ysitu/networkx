@@ -1,0 +1,3 @@
+!.gitignore
+/_metis.c
+/_metis*.so
