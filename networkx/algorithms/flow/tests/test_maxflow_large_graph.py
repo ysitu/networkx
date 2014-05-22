@@ -14,10 +14,10 @@ from nose.tools import *
 
 import networkx as nx
 from networkx.algorithms.flow.utils import *
-from networkx.algorithms.flow.edmonds_karp import *
-from networkx.algorithms.flow.ford_fulkerson import *
-from networkx.algorithms.flow.preflow_push import *
-from networkx.algorithms.flow.shortest_augmenting_path import *
+from networkx.algorithms.flow.edmondskarp import *
+from networkx.algorithms.flow.fordfulkerson import *
+from networkx.algorithms.flow.preflowpush import *
+from networkx.algorithms.flow.shortestaugmentingpath import *
 
 flow_funcs = [edmonds_karp, ford_fulkerson, preflow_push,
               shortest_augmenting_path]
@@ -26,7 +26,7 @@ preflow_push = partial(preflow_push, value_only=False)
 preflow_push.__name__ = 'preflow_push'
 
 flow_funcs = [edmonds_karp, ford_fulkerson, preflow_push,
-                shortest_augmenting_path]
+              shortest_augmenting_path]
 
 msg = "Assertion failed in function: {0}"
 
@@ -110,7 +110,7 @@ class TestMaxflowLargeGraph:
 
     def test_pyramid(self):
         N = 10
-#        N = 100 # this gives a graph with 5051 nodes
+        # N = 100  # this gives a graph with 5051 nodes
         G = gen_pyramid(N)
         for flow_func in flow_funcs:
             R = flow_func(G, (0, 0), 't')
@@ -144,5 +144,5 @@ class TestMaxflowLargeGraph:
 
     def test_preflow_push_global_relabel(self):
         G = read_graph('gw1')
-        R = nx.preflow_push(G, 1, len(G), global_relabel_freq=50)
+        R = preflow_push(G, 1, len(G), global_relabel_freq=50)
         assert_equal(R.graph['flow_value'], 1202018)

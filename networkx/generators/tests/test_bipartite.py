@@ -14,7 +14,7 @@ class TestGeneratorsBipartite():
         bseq=[2,2,2,2,2]
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_configuration_model, aseq, bseq)
-        
+
         aseq=[3,3,3,3]
         bseq=[2,2,2,2,2,2]
         G=bipartite_configuration_model(aseq,bseq)
@@ -48,7 +48,7 @@ class TestGeneratorsBipartite():
         bseq=[2,2,2,2,2]
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_havel_hakimi_graph, aseq, bseq)
-        
+
         bseq=[2,2,2,2,2,2]
         G=bipartite_havel_hakimi_graph(aseq,bseq)
         assert_equal(sorted(G.degree().values()),
@@ -68,13 +68,13 @@ class TestGeneratorsBipartite():
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_havel_hakimi_graph, aseq, bseq,
                       create_using=DiGraph())
-            
+
     def test_reverse_havel_hakimi_graph(self):
         aseq=[3,3,3,3]
         bseq=[2,2,2,2,2]
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_reverse_havel_hakimi_graph, aseq, bseq)
-        
+
         bseq=[2,2,2,2,2,2]
         G=bipartite_reverse_havel_hakimi_graph(aseq,bseq)
         assert_equal(sorted(G.degree().values()),
@@ -100,13 +100,13 @@ class TestGeneratorsBipartite():
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_reverse_havel_hakimi_graph, aseq, bseq,
                       create_using=DiGraph())
-        
+
     def test_alternating_havel_hakimi_graph(self):
         aseq=[3,3,3,3]
         bseq=[2,2,2,2,2]
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_alternating_havel_hakimi_graph, aseq, bseq)
-        
+
         bseq=[2,2,2,2,2,2]
         G=bipartite_alternating_havel_hakimi_graph(aseq,bseq)
         assert_equal(sorted(G.degree().values()),
@@ -133,7 +133,7 @@ class TestGeneratorsBipartite():
         assert_raises(networkx.exception.NetworkXError,
                       bipartite_alternating_havel_hakimi_graph, aseq, bseq,
                       create_using=DiGraph())
-        
+
     def test_preferential_attachment(self):
         aseq=[3,2,1,1]
         G=bipartite_preferential_attachment_graph(aseq,0.5)
@@ -147,7 +147,7 @@ class TestGeneratorsBipartite():
         G=bipartite_random_graph(n,m,0.9)
         assert_equal(len(G),30)
         assert_true(is_bipartite(G))
-        X,Y=nx.algorithms.bipartite.sets(G)
+        X,Y=networkx.algorithms.bipartite.sets(G)
         assert_equal(set(range(n)),X)
         assert_equal(set(range(n,n+m)),Y)
 
@@ -157,7 +157,7 @@ class TestGeneratorsBipartite():
         G=bipartite_random_graph(n,m,0.9,directed=True)
         assert_equal(len(G),30)
         assert_true(is_bipartite(G))
-        X,Y=nx.algorithms.bipartite.sets(G)
+        X,Y=networkx.algorithms.bipartite.sets(G)
         assert_equal(set(range(n)),X)
         assert_equal(set(range(n,n+m)),Y)
 
@@ -168,9 +168,7 @@ class TestGeneratorsBipartite():
         G = bipartite_gnmk_random_graph(n, m, edges)
         assert_equal(len(G),30)
         assert_true(is_bipartite(G))
-        X,Y=nx.algorithms.bipartite.sets(G)
-        print(X)
+        X,Y=networkx.algorithms.bipartite.sets(G)
         assert_equal(set(range(n)),X)
         assert_equal(set(range(n,n+m)),Y)
         assert_equal(edges, len(G.edges()))
-

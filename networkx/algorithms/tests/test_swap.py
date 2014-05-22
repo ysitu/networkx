@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from nose.tools import *
+import networkx as nx
 from networkx import *
 
 import random
@@ -41,4 +42,3 @@ def test_degree_seq_c4():
     degrees = sorted(G.degree().values())
     G = double_edge_swap(G,1,100)
     assert_equal(degrees, sorted(G.degree().values()))
-

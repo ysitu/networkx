@@ -1,1 +1,3 @@
-from networkx.algorithms.community.kclique import *
+from .kclique import *
+
+__all__ = kclique.__all__

@@ -112,32 +112,32 @@ def test_directed_havel_hakimi():
     n, r = 100, 10
     p = 1.0 / r
     for i in range(r):
-        G1 = nx.erdos_renyi_graph(n,p*(i+1),None,True)
+        G1 = networkx.erdos_renyi_graph(n,p*(i+1),None,True)
         din = list(G1.in_degree().values())
         dout = list(G1.out_degree().values())
-        G2 = nx.directed_havel_hakimi_graph(din, dout)
+        G2 = networkx.directed_havel_hakimi_graph(din, dout)
         assert_true(din == list(G2.in_degree().values()))
         assert_true(dout == list(G2.out_degree().values()))
 
     # Test non-graphical sequence
     dout = [1000,3,3,3,3,2,2,2,1,1,1]
     din=[103,102,102,102,102,102,102,102,102,102]
-    assert_raises(nx.exception.NetworkXError,
-                  nx.directed_havel_hakimi_graph, din, dout)
+    assert_raises(networkx.exception.NetworkXError,
+                  networkx.directed_havel_hakimi_graph, din, dout)
     # Test valid sequences
     dout=[1, 1, 1, 1, 1, 2, 2, 2, 3, 4]
     din=[2, 2, 2, 2, 2, 2, 2, 2, 0, 2]
-    G2 = nx.directed_havel_hakimi_graph(din, dout)
+    G2 = networkx.directed_havel_hakimi_graph(din, dout)
     assert_true(din == list(G2.in_degree().values()))
     assert_true(dout == list(G2.out_degree().values()))
     # Test unequal sums
     din=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
-    assert_raises(nx.exception.NetworkXError,
-                  nx.directed_havel_hakimi_graph, din, dout)
+    assert_raises(networkx.exception.NetworkXError,
+                  networkx.directed_havel_hakimi_graph, din, dout)
     # Test for negative values
     din=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, -2]
-    assert_raises(nx.exception.NetworkXError,
-                  nx.directed_havel_hakimi_graph, din, dout)
+    assert_raises(networkx.exception.NetworkXError,
+                  networkx.directed_havel_hakimi_graph, din, dout)
 
 def test_degree_sequence_tree():
     z=[1, 1, 1, 1, 1, 2, 2, 2, 3, 4]
@@ -154,7 +154,7 @@ def test_degree_sequence_tree():
 
 def test_random_degree_sequence_graph():
     d=[1,2,2,3]
-    G = nx.random_degree_sequence_graph(d)
+    G = networkx.random_degree_sequence_graph(d)
     assert_equal(d, list(G.degree().values()))
 
 def test_random_degree_sequence_graph_raise():
@@ -163,7 +163,7 @@ def test_random_degree_sequence_graph_raise():
                   random_degree_sequence_graph, z)
 
 def test_random_degree_sequence_large():
-    G = nx.fast_gnp_random_graph(100,0.1)
+    G = networkx.fast_gnp_random_graph(100,0.1)
     d = G.degree().values()
-    G = nx.random_degree_sequence_graph(d, seed=0)
+    G = networkx.random_degree_sequence_graph(d, seed=0)
     assert_equal(sorted(d), sorted(list(G.degree().values())))

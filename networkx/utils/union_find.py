@@ -1,13 +1,16 @@
 """
 Union-find data structure.
 """
-#    Copyright (C) 2004-2011 by 
+#    Copyright (C) 2004-2011 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Pieter Swart <swart@lanl.gov>
 #    All rights reserved.
 #    BSD license.
 import networkx as nx
+
+__all__ = ['UnionFind']
+
 
 class UnionFind:
     """Union-find data structure.
@@ -57,7 +60,7 @@ class UnionFind:
         for ancestor in path:
             self.parents[ancestor] = root
         return root
-        
+
     def __iter__(self):
         """Iterate through all items ever found or unioned by this structure."""
         return iter(self.parents)
@@ -70,6 +73,3 @@ class UnionFind:
             if r != heaviest:
                 self.weights[heaviest] += self.weights[r]
                 self.parents[r] = heaviest
-
-
-

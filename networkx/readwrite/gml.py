@@ -34,7 +34,8 @@ __author__ = """Aric Hagberg (hagberg@lanl.gov)"""
 #    All rights reserved.
 #    BSD license.
 
-__all__ = ['read_gml', 'parse_gml', 'generate_gml', 'write_gml']
+__all__ = list(map(str,
+                   ['read_gml', 'parse_gml', 'generate_gml', 'write_gml']))
 
 from cgi import escape
 

@@ -37,53 +37,40 @@ import sys
 if sys.version_info[:2] < (2, 6):
     m = "Python version 2.6 or later is required for NetworkX (%d.%d detected)."
     raise ImportError(m % sys.version_info[:2])
-del sys
 
 # Release data
-from networkx import release
+from . import release
 
-__author__   = '%s <%s>\n%s <%s>\n%s <%s>' % \
-              ( release.authors['Hagberg'] + release.authors['Schult'] + \
-                release.authors['Swart'] )
-__license__  = release.license
-
+__author__ = ('%s <%s>\n%s <%s>\n%s <%s>' %
+              (release.authors['Hagberg'] + release.authors['Schult'] +
+               release.authors['Swart']))
+__license__ = release.license
 __date__ = release.date
 __version__ = release.version
 
-#These are import orderwise
-from networkx.exception import  *
-import networkx.external
-import networkx.utils
-# these packages work with Python >= 2.6
+import networkx
+from .exception import *
+from . import external, utils
+from .algorithms import *
+from .classes import *
+from .convert import *
+from .convert_matrix import *
+from .drawing import *
+from .generators import *
+from .linalg import *
+from .readwrite import *
+from .relabel import *
+from .tests.test import run as test
 
-import networkx.classes
-from networkx.classes import *
-
-
-import networkx.convert
-from networkx.convert import *
-
-import networkx.convert_matrix
-from networkx.convert_matrix import *
-
-
-import networkx.relabel
-from networkx.relabel import *
-
-import networkx.generators
-from networkx.generators import *
-
-import networkx.readwrite
-from networkx.readwrite import *
-
-#Need to test with SciPy, when available
-import networkx.algorithms
-from networkx.algorithms import *
-import networkx.linalg
-
-from networkx.linalg import *
-from networkx.tests.test import run as test
-
-import networkx.drawing
-from networkx.drawing import *
-
+__all__ = sum([algorithms.__all__,
+               classes.__all__,
+               convert.__all__,
+               convert_matrix.__all__,
+               drawing.__all__,
+               exception.__all__,
+               generators.__all__,
+               linalg.__all__,
+               readwrite.__all__,
+               relabel.__all__,
+               ['test']
+               ], ['networkx'])

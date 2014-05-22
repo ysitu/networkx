@@ -1,14 +1,13 @@
-"""Connectivity and cut algorithms
 """
-from . import connectivity, cuts, stoer_wagner, utils
+Connectivity and cut algorithms
+"""
+from .connectivity import *
+from .connectivity import local_node_connectivity, local_edge_connectivity
+from .cuts import *
+from .stoerwagner import *
+from .utils import *
 
 __all__ = sum([connectivity.__all__,
                cuts.__all__,
-               stoer_wagner.__all__,
-               utils.__all__,
+               stoerwagner.__all__
               ], [])
-
-from .connectivity import *
-from .cuts import *
-from .stoer_wagner import *
-from .utils import *

@@ -1,3 +1,3 @@
-from networkx.algorithms.chordal.chordal_alg import *
+from .chordal_alg import *
 
-
+__all__ = chordal_alg.__all__

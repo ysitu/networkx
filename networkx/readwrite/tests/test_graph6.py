@@ -73,7 +73,7 @@ class TestGraph6(object):
 
     def test_generate_and_parse_graph6(self):
         for i in list(range(13)) + [31, 47, 62, 63, 64, 72]:
-            g = nx.random_graphs.gnm_random_graph(i, i * i // 4, seed=i)
+            g = nx.gnm_random_graph(i, i * i // 4, seed=i)
             gstr = nx.generate_graph6(g, header=False)
             assert_equal(len(gstr),
                          ((i-1) * i // 2 + 5) // 6 + (1 if i < 63 else 4))

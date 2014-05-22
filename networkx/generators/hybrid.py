@@ -1,16 +1,16 @@
 """
-Hybrid 
+Hybrid
 
 """
 __author__ = """Aric Hagberg (hagberg@lanl.gov)\nDan Schult (dschult@colgate.edu)"""
-#    Copyright (C) 2004-2008 by 
+#    Copyright (C) 2004-2008 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Pieter Swart <swart@lanl.gov>
 #    All rights reserved.
 #    BSD license.
 
-_all__ = ['kl_connected_subgraph', 'is_kl_connected']
+__all__ = ['kl_connected_subgraph', 'is_kl_connected']
 
 import copy
 import networkx as nx
@@ -28,7 +28,7 @@ def kl_connected_subgraph(G,k,l,low_memory=False,same_as_graph=False):
         pflag for if G is kl-connected
     """
     H=copy.deepcopy(G)    # subgraph we construct by removing from G
-    
+
     graphOK=True
     deleted_some=True # hack to start off the while loop
     while deleted_some:

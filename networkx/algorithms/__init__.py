@@ -1,62 +1,78 @@
-from networkx.algorithms.assortativity import *
-from networkx.algorithms.block import *
-from networkx.algorithms.boundary import *
-from networkx.algorithms.centrality import *
-from networkx.algorithms.cluster import *
-from networkx.algorithms.clique import *
-from networkx.algorithms.community import *
-from networkx.algorithms.components import *
-from networkx.algorithms.core import *
-from networkx.algorithms.cycles import *
-from networkx.algorithms.dag import *
-from networkx.algorithms.distance_measures import *
-from networkx.algorithms.dominating import *
-from networkx.algorithms.flow import *
-from networkx.algorithms.hierarchy import *
-from networkx.algorithms.matching import *
-from networkx.algorithms.mis import *
-from networkx.algorithms.mst import *
-from networkx.algorithms.link_analysis import *
-from networkx.algorithms.link_prediction import *
-from networkx.algorithms.operators import *
-from networkx.algorithms.shortest_paths import *
-from networkx.algorithms.smetric import *
-from networkx.algorithms.traversal import *
-from networkx.algorithms.isolate import *
-from networkx.algorithms.euler import *
-from networkx.algorithms.vitality import *
-from networkx.algorithms.chordal import *
-from networkx.algorithms.richclub import *
-from networkx.algorithms.distance_regular import *
-from networkx.algorithms.swap import *
-from networkx.algorithms.graphical import *
-from networkx.algorithms.simple_paths import *
-from networkx.algorithms.tree import *
+from .approximation import *
+from .assortativity import *
+from .bipartite import *
+from .block import *
+from .boundary import *
+from .centrality import *
+from .chordal import *
+from .clique import *
+from .cluster import *
+from .community import *
+from .components import *
+from .connectivity import *
+from .core import *
+from .cycles import *
+from .dag import *
+from .distance_measures import *
+from .distance_regular import *
+from .dominating import *
+from .euler import *
+from .flow import *
+from .graphical import *
+from .hierarchy import *
+from .isolate import *
+from .isomorphism import *
+from .link_analysis import *
+from .link_prediction import *
+from .matching import *
+from .mis import *
+from .mst import *
+from .operators import *
+from .richclub import *
+from .shortest_paths import *
+from .simple_paths import *
+from .smetric import *
+from .swap import *
+from .traversal import *
+from .tree import *
+from .vitality import *
 
-
-import networkx.algorithms.assortativity
-import networkx.algorithms.bipartite
-import networkx.algorithms.centrality
-import networkx.algorithms.cluster
-import networkx.algorithms.clique
-import networkx.algorithms.components
-import networkx.algorithms.connectivity
-import networkx.algorithms.flow
-import networkx.algorithms.isomorphism
-import networkx.algorithms.link_analysis
-import networkx.algorithms.shortest_paths
-import networkx.algorithms.traversal
-import networkx.algorithms.chordal
-import networkx.algorithms.operators
-import networkx.algorithms.tree 
-
-
-# bipartite
-from networkx.algorithms.bipartite import projected_graph, project, is_bipartite
-# connectivity
-from networkx.algorithms.connectivity import (minimum_edge_cut, minimum_node_cut,
-    average_node_connectivity, edge_connectivity, node_connectivity,
-    stoer_wagner, all_pairs_node_connectivity)
-# isomorphism
-from networkx.algorithms.isomorphism import (is_isomorphic, could_be_isomorphic,
-    fast_could_be_isomorphic, faster_could_be_isomorphic)
+__all__ = sum([approximation.__all__,
+               assortativity.__all__,
+               bipartite.__all__,
+               block.__all__,
+               boundary.__all__,
+               centrality.__all__,
+               chordal.__all__,
+               clique.__all__,
+               cluster.__all__,
+               community.__all__,
+               components.__all__,
+               connectivity.__all__,
+               core.__all__,
+               cycles.__all__,
+               dag.__all__,
+               distance_measures.__all__,
+               distance_regular.__all__,
+               dominating.__all__,
+               euler.__all__,
+               flow.__all__,
+               graphical.__all__,
+               hierarchy.__all__,
+               isolate.__all__,
+               isomorphism.__all__,
+               link_analysis.__all__,
+               link_prediction.__all__,
+               matching.__all__,
+               mis.__all__,
+               mst.__all__,
+               operators.__all__,
+               richclub.__all__,
+               shortest_paths.__all__,
+               simple_paths.__all__,
+               smetric.__all__,
+               swap.__all__,
+               traversal.__all__,
+               tree.__all__,
+               vitality.__all__
+               ], [])

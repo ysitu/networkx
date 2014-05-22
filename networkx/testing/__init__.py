@@ -1,1 +1,3 @@
-from networkx.testing.utils import *
+from .utils import *
+
+__all__ = utils.__all__

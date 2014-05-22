@@ -18,6 +18,11 @@ __author__ = """Aric Hagberg (hagberg@lanl.gov)\nPieter Swart (swart@lanl.gov)\n
 
 # Exception handling
 
+__all__ = ['NetworkXException', 'NetworkXError', 'NetworkXPointlessConcept',
+           'NetworkXAlgorithmError', 'NetworkXUnfeasible', 'NetworkXNoPath',
+           'NetworkXUnbounded', 'NetworkXNotImplemented']
+
+
 # the root of all Exceptions
 class NetworkXException(Exception):
     """Base class for exceptions in NetworkX."""

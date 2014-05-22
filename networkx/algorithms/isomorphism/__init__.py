@@ -1,4 +1,6 @@
-from networkx.algorithms.isomorphism.isomorph import *
-from networkx.algorithms.isomorphism.vf2userfunc import *
-from networkx.algorithms.isomorphism.matchhelpers import *
+from .isomorph import *
+from .matchhelpers import *
+from .vf2userfunc import *
 
+__all__ = ['could_be_isomorphic', 'fast_could_be_isomorphic',
+           'faster_could_be_isomorphic', 'is_isomorphic']

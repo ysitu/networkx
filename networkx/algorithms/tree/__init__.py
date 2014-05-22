@@ -1,1 +1,3 @@
-from networkx.algorithms.tree.recognition import *
+from .recognition import *
+
+__all__ = recognition.__all__

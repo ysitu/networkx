@@ -7,10 +7,10 @@ from nose.tools import *
 
 import networkx as nx
 from networkx.algorithms.flow.utils import *
-from networkx.algorithms.flow.edmonds_karp import *
-from networkx.algorithms.flow.ford_fulkerson import *
-from networkx.algorithms.flow.preflow_push import *
-from networkx.algorithms.flow.shortest_augmenting_path import *
+from networkx.algorithms.flow.edmondskarp import *
+from networkx.algorithms.flow.fordfulkerson import *
+from networkx.algorithms.flow.preflowpush import *
+from networkx.algorithms.flow.shortestaugmentingpath import *
 
 flow_funcs = [edmonds_karp, ford_fulkerson, preflow_push,
               shortest_augmenting_path]
@@ -90,7 +90,7 @@ def compare_flows_and_cuts(G, s, t, solnFlows, solnValue, capacity='capacity'):
         # Minimum cut
         if legacy:
             cut_value, partition = nx.minimum_cut(G, s, t,  capacity=capacity,
-                                                  flow_func=nx.ford_fulkerson)
+                                                  flow_func=ford_fulkerson)
         else:
             cut_value, partition = nx.minimum_cut(G, s, t, capacity=capacity,
                                                   flow_func=flow_func)
@@ -388,7 +388,7 @@ class TestMaxFlowMinCutInterface:
                     result = result[0]
                 assert_equal(fv, result, msg=msgi.format(flow_func.__name__,
                                                     interface_func.__name__))
- 
+
     def test_minimum_cut_no_cutoff(self):
         G = self.G
         for flow_func in flow_funcs:
@@ -401,8 +401,8 @@ class TestMaxFlowMinCutInterface:
         G = self.H
         fv = 1.0
         to_test = (
-            (nx.shortest_augmenting_path, dict(two_phase=True)),
-            (nx.preflow_push, dict(global_relabel_freq=5)),
+            (shortest_augmenting_path, dict(two_phase=True)),
+            (preflow_push, dict(global_relabel_freq=5)),
         )
         for interface_func in interface_funcs:
             for flow_func, kwargs in to_test:
@@ -415,7 +415,7 @@ class TestMaxFlowMinCutInterface:
     def test_kwargs_default_flow_func(self):
         G = self.H
         for interface_func in interface_funcs:
-            assert_raises(nx.NetworkXError, interface_func, 
+            assert_raises(nx.NetworkXError, interface_func,
                           G, 0, 1, global_relabel_freq=2)
 
     def test_reusing_residual(self):
@@ -439,10 +439,11 @@ class TestMaxFlowMinCutInterface:
 def test_preflow_push_global_relabel_freq():
     G = nx.DiGraph()
     G.add_edge(1, 2, capacity=1)
-    R = nx.preflow_push(G, 1, 2, global_relabel_freq=None)
+    R = preflow_push(G, 1, 2, global_relabel_freq=None)
     assert_equal(R.graph['flow_value'], 1)
     assert_raises(nx.NetworkXError, preflow_push, G, 1, 2,
                   global_relabel_freq=-1)
+
 
 def test_shortest_augmenting_path_two_phase():
     k = 5
@@ -478,11 +479,11 @@ class TestCutoff:
 
     def test_complete_graph_cutoff(self):
         G = nx.complete_graph(5)
-        nx.set_edge_attributes(G, 'capacity', 
+        nx.set_edge_attributes(G, 'capacity',
                                dict(((u, v), 1) for u, v in G.edges()))
         for flow_func in [shortest_augmenting_path, edmonds_karp]:
             for cutoff in [3, 2, 1]:
                 result = nx.maximum_flow_value(G, 0, 4, flow_func=flow_func,
                                                cutoff=cutoff)
-                assert_equal(cutoff, result, 
+                assert_equal(cutoff, result,
                             msg="cutoff error in {0}".format(flow_func.__name__))

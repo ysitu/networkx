@@ -91,7 +91,7 @@ class TestSparseGraph6(object):
     def test_generate_and_parse_sparse6(self):
         for i in list(range(13)) + [31, 47, 62, 63, 64, 72]:
             m = min(2 * i, i * i // 2)
-            g = nx.random_graphs.gnm_random_graph(i, m, seed=i)
+            g = nx.gnm_random_graph(i, m, seed=i)
             gstr = nx.generate_sparse6(g, header=False)
             g2 = nx.parse_sparse6(gstr)
             assert_equal(g2.order(), g.order())

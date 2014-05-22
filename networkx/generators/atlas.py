@@ -9,17 +9,17 @@ Oxford University Press, 1998.
 Because of its size, this module is not imported by default.
 
 """
-#    Copyright (C) 2004-2008 by 
+#    Copyright (C) 2004-2008 by
 #    Aric Hagberg <hagberg@lanl.gov>
 #    Dan Schult <dschult@colgate.edu>
 #    Pieter Swart <swart@lanl.gov>
 #    All rights reserved.
 #    BSD license.
 __author__ = """Pieter Swart (swart@lanl.gov)"""
- 
+
 __all__ = ['graph_atlas_g']
 
-from networkx.generators.small import make_small_graph
+from .small import make_small_graph
 
 def graph_atlas_g():
     """
@@ -12333,4 +12333,3 @@ def graph_atlas_g():
         GAG.append(g)
 
     return GAG
-

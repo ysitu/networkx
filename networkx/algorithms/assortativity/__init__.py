@@ -1,5 +1,12 @@
-from networkx.algorithms.assortativity.connectivity import *
-from networkx.algorithms.assortativity.correlation import *
-from networkx.algorithms.assortativity.mixing import *
-from networkx.algorithms.assortativity.neighbor_degree import *
-from networkx.algorithms.assortativity.pairs import *
+from .connectivity import *
+from .correlation import *
+from .mixing import *
+from .neighbor_degree import *
+from .pairs import *
+
+__all__ = sum([connectivity.__all__,
+               correlation.__all__,
+               mixing.__all__,
+               neighbor_degree.__all__,
+               pairs.__all__
+               ], [])

@@ -6,3 +6,5 @@ if sys.version >= '3':
     from .decorator3._decorator3 import decorator, FunctionMaker, partial
 else:
     from .decorator2._decorator2 import decorator, FunctionMaker, partial
+
+__all__ = ['decorator', 'FunctionMaker', 'partial']

@@ -1,9 +1,12 @@
-from networkx.linalg.attrmatrix import *
-import networkx.linalg.attrmatrix
-from networkx.linalg.spectrum import *
-import networkx.linalg.spectrum
-from networkx.linalg.graphmatrix import *
-import networkx.linalg.graphmatrix
-from networkx.linalg.laplacianmatrix import *
-import networkx.linalg.laplacianmatrix
-from networkx.linalg.algebraicconnectivity import *
+from .algebraicconnectivity import *
+from .attrmatrix import *
+from .graphmatrix import *
+from .laplacianmatrix import *
+from .spectrum import *
+
+__all__ = sum([algebraicconnectivity.__all__,
+               attrmatrix.__all__,
+               graphmatrix.__all__,
+               laplacianmatrix.__all__,
+               spectrum.__all__
+               ], [])

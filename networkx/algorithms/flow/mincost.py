@@ -276,6 +276,8 @@ def max_flow_min_cost(G, s, t, capacity = 'capacity', weight = 'weight'):
 
     Examples
     --------
+    >>> import networkx as nx
+    >>> from networkx.algorithms.flow import ford_fulkerson
     >>> G = nx.DiGraph()
     >>> G.add_edges_from([(1, 2, {'capacity': 12, 'weight': 4}),
     ...                   (1, 3, {'capacity': 20, 'weight': 6}),
@@ -292,7 +294,7 @@ def max_flow_min_cost(G, s, t, capacity = 'capacity', weight = 'weight'):
     >>> mincostFlow = nx.max_flow_min_cost(G, 1, 7)
     >>> nx.cost_of_flow(G, mincostFlow)
     373
-    >>> R = nx.ford_fulkerson(G, 1, 7)
+    >>> R = ford_fulkerson(G, 1, 7)
     >>> maxFlow = R.graph['flow_dict']
     >>> nx.cost_of_flow(G, maxFlow)
     428

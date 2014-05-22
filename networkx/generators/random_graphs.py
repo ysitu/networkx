@@ -795,7 +795,7 @@ def random_shell_graph(constructor, seed=None):
             first_label=nnodes)
         glist.append(g)
         nnodes+=n
-        G=nx.operators.union(G,g)
+        G=nx.union(G,g)
 
     # connect the shells randomly
     for gi in range(len(glist)-1):

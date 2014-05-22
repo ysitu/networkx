@@ -24,6 +24,12 @@ from networkx.external.decorator import decorator
 __author__ = '\n'.join(['Aric Hagberg (hagberg@lanl.gov)',
                         'Dan Schult(dschult@colgate.edu)',
                         'Ben Edwards(bedwards@cs.unm.edu)'])
+
+__all__ = ['is_string_like', 'iterable', 'flatten', 'is_list_of_ints',
+           'make_str','cumulative_sum', 'generate_unique_node',
+           'default_opener', 'dict_to_numpy_array', 'dict_to_numpy_array2',
+           'dict_to_numpy_array1']
+
 ### some cookbook stuff
 # used in deciding whether something is a bunch of nodes, edges, etc.
 # see G.add_nodes and others in Graph Class in networkx/base.py

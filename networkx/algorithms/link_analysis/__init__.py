@@ -1,2 +1,6 @@
-from networkx.algorithms.link_analysis.pagerank_alg import *
-from networkx.algorithms.link_analysis.hits_alg import *
+from .hits_alg import *
+from .pagerank_alg import *
+
+__all__ = sum([hits_alg.__all__,
+               pagerank_alg.__all__
+               ], [])

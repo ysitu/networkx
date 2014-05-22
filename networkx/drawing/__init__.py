@@ -1,20 +1,25 @@
 # graph drawing and interface to graphviz
 import sys
-from networkx.drawing.layout import *
-from networkx.drawing.nx_pylab import *
+from .layout import *
+from .nx_pylab import *
 
 # graphviz interface
 # prefer pygraphviz/agraph (it's faster)
-from networkx.drawing.nx_agraph import *
+from .nx_agraph import *
+
+__all__ = sum([layout.__all__,
+               nx_pylab.__all__,
+               nx_agraph.__all__
+               ], [])
+
 try:
     import pydot
-    import networkx.drawing.nx_pydot
-    from networkx.drawing.nx_pydot import *
+    from .nx_pydot import *
+    __all__ += nx_pydot.__all__
 except ImportError:
     pass
 try:
     import pygraphviz
-    from networkx.drawing.nx_agraph import *
-except ImportError:    
-    pass 
+except ImportError:
+    pass
 

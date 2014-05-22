@@ -12,6 +12,11 @@ The three formats that you can generate with NetworkX are:
  - tree like in the d3.js example http://bl.ocks.org/mbostock/4063550
  - adjacency like in the d3.js example http://bost.ocks.org/mike/miserables/
 """
-from networkx.readwrite.json_graph.node_link import *
-from networkx.readwrite.json_graph.adjacency import *
-from networkx.readwrite.json_graph.tree import *
+from .adjacency import *
+from .node_link import *
+from .tree import *
+
+__all__ = sum([adjacency.__all__,
+               node_link.__all__,
+               tree.__all__
+               ], [])

@@ -5,7 +5,7 @@ from os.path import splitext
 
 import networkx as nx
 from networkx.external.decorator import decorator
-from networkx.utils import is_string_like
+from .misc import is_string_like
 
 __all__ = [
     'not_implemented_for',

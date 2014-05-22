@@ -1,6 +1,12 @@
-from networkx.algorithms.shortest_paths.generic import *
-from networkx.algorithms.shortest_paths.unweighted import *
-from networkx.algorithms.shortest_paths.weighted import *
-from networkx.algorithms.shortest_paths.astar import *
-from networkx.algorithms.shortest_paths.dense import *
+from .astar import *
+from .dense import *
+from .generic import *
+from .unweighted import *
+from .weighted import *
 
+__all__ = sum([astar.__all__,
+               dense.__all__,
+               generic.__all__,
+               unweighted.__all__,
+               weighted.__all__
+               ], [])
