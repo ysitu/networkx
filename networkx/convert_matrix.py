@@ -125,7 +125,8 @@ def to_numpy_matrix(G, nodelist=None, dtype=None, order=None,
     """
     import numpy as np
     if nodelist is None:
-        nodelist = G.nodes()
+        nodelist = G
+    nodelist = list(nodelist)
     nodeset = set(nodelist)
     if len(nodelist) != len(nodeset):
         msg = "Ambiguous ordering: `nodelist` contained duplicates."
@@ -342,7 +343,8 @@ def to_numpy_recarray(G,nodelist=None,
     """
     import numpy as np
     if nodelist is None:
-        nodelist = G.nodes()
+        nodelist = G
+    nodelist = list(nodelist)
     nodeset = set(nodelist)
     if len(nodelist) != len(nodeset):
         msg = "Ambiguous ordering: `nodelist` contained duplicates."
@@ -445,6 +447,7 @@ def to_scipy_sparse_matrix(G, nodelist=None, dtype=None,
     from scipy import sparse
     if nodelist is None:
         nodelist = G
+    nodelist = list(nodelist)
     nlen = len(nodelist)
     if nlen == 0:
         raise nx.NetworkXError("Graph has no nodes or edges")

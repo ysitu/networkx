@@ -214,7 +214,7 @@ def generate_sparse6(G, nodes=None, header=True):
         return [1 if (x & 1 << (k-1-i)) else 0 for i in range(k)]
 
     if nodes is None:
-        ns = list(G.nodes()) # number -> node
+        ns = list(G) # number -> node
     else:
         ns = list(nodes)
     ndict = dict(((ns[i], i) for i in range(len(ns)))) # node -> number

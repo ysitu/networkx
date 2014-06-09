@@ -47,7 +47,7 @@ def projected_graph(B, nodes, multigraph=False):
     >>> from networkx.algorithms import bipartite
     >>> B = nx.path_graph(4)
     >>> G = bipartite.projected_graph(B, [1,3]) 
-    >>> print(G.nodes())
+    >>> print(sorted(G.nodes()))
     [1, 3]
     >>> print(G.edges())
     [(1, 3)]
@@ -149,7 +149,7 @@ def weighted_projected_graph(B, nodes, ratio=False):
     >>> from networkx.algorithms import bipartite
     >>> B = nx.path_graph(4)
     >>> G = bipartite.weighted_projected_graph(B, [1,3])
-    >>> print(G.nodes())
+    >>> print(sorted(G.nodes()))
     [1, 3]
     >>> print(G.edges(data=True))
     [(1, 3, {'weight': 1})]
@@ -242,9 +242,9 @@ def collaboration_weighted_projected_graph(B, nodes):
     >>> B = nx.path_graph(5)
     >>> B.add_edge(1,5)
     >>> G = bipartite.collaboration_weighted_projected_graph(B, [0, 2, 4, 5])
-    >>> print(G.nodes())
+    >>> print(sorted(G.nodes()))
     [0, 2, 4, 5]
-    >>> for edge in G.edges(data=True): print(edge)
+    >>> for edge in sorted(G.edges(data=True)): print(edge)
     ... 
     (0, 2, {'weight': 0.5})
     (0, 5, {'weight': 0.5})
@@ -335,7 +335,7 @@ def overlap_weighted_projected_graph(B, nodes, jaccard=True):
     >>> from networkx.algorithms import bipartite
     >>> B = nx.path_graph(5)
     >>> G = bipartite.overlap_weighted_projected_graph(B, [0, 2, 4])
-    >>> print(G.nodes())
+    >>> print(sorted(G.nodes()))
     [0, 2, 4]
     >>> print(G.edges(data=True))
     [(0, 2, {'weight': 0.5}), (2, 4, {'weight': 0.5})]
@@ -437,7 +437,7 @@ def generic_weighted_projected_graph(B, nodes, weight_function=None):
     >>> for i,(u,v) in enumerate(B.edges()):
     ...     B.edge[u][v]['weight'] = i + 1
     ... 
-    >>> for edge in B.edges(data=True):
+    >>> for edge in sorted(B.edges(data=True)):
     ...     print(edge)
     ... 
     (0, 2, {'weight': 1})

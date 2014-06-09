@@ -197,7 +197,7 @@ def to_pydot(N, strict=True):
     except KeyError:
         pass
 
-    for n,nodedata in N.nodes_iter(data=True):
+    for n,nodedata in N.nodes(data=True):
         str_nodedata=dict((k,make_str(v)) for k,v in nodedata.items())
         p=pydot.Node(make_str(n),**str_nodedata)
         P.add_node(p)
@@ -282,7 +282,7 @@ def pydot_layout(G,prog='neato',root=None, **kwds):
     Q=pydot.graph_from_dot_data(D)
 
     node_pos={}
-    for n in G.nodes():
+    for n in G:
         pydot_node = pydot.Node(make_str(n)).get_name().encode('utf-8')
         node=Q.get_node(pydot_node)
 

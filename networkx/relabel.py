@@ -44,9 +44,8 @@ def relabel_nodes(G, mapping, copy=True):
     >>> G=nx.path_graph(3)  # nodes 0-1-2
     >>> mapping={0:'a',1:'b'} # 0->'a' and 1->'b'
     >>> G=nx.relabel_nodes(G,mapping, copy=False)
-
-    print(G.nodes())
-    [2, 'b', 'a']
+    >>> print(sorted(G.nodes(),key=str))
+    [2, 'a', 'b']
 
     Mapping as function:
 
@@ -54,7 +53,7 @@ def relabel_nodes(G, mapping, copy=True):
     >>> def mapping(x):
     ...    return x**2
     >>> H=nx.relabel_nodes(G,mapping)
-    >>> print(H.nodes())
+    >>> print(sorted(H.nodes()))
     [0, 1, 4]
 
     Notes
@@ -182,8 +181,7 @@ def convert_node_labels_to_integers(G, first_label=0, ordering="default",
     if ordering == "default":
         mapping = dict(zip(G.nodes(), range(first_label, N)))
     elif ordering == "sorted":
-        nlist = G.nodes()
-        nlist.sort()
+        nlist = sorted(G.nodes())
         mapping = dict(zip(nlist, range(first_label, N)))
     elif ordering == "increasing degree":
         dv_pairs = [(d,n) for (n,d) in G.degree_iter()]

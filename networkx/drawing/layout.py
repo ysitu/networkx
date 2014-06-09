@@ -139,9 +139,9 @@ def shell_layout(G,nlist=None,dim=2,scale=1):
     if len(G)==0:
         return {}
     if len(G)==1:
-        return {G.nodes()[0]:(1,)*dim}
+        return {next(G.nodes()):(1,)*dim}
     if nlist==None:
-        nlist=[G.nodes()] # draw the whole graph in one shell
+        nlist=[list(G)] # draw the whole graph in one shell
 
     if len(nlist[0])==1:
         radius=0.0 # single node at center

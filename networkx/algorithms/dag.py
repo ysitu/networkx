@@ -129,7 +129,7 @@ def topological_sort(G, nbunch=None, reverse=False):
     explored = set() 
                      
     if nbunch is None:
-        nbunch = G.nodes_iter() 
+        nbunch = G
     for v in nbunch:     # process all vertices in G
         if v in explored: 
             continue
@@ -219,7 +219,7 @@ def topological_sort_recursive(G, nbunch=None, reverse=False):
     order = []
 
     if nbunch is None:
-        nbunch = G.nodes_iter()
+        nbunch = G
 
     for v in nbunch:
         if v not in explored:
@@ -267,7 +267,7 @@ def is_aperiodic(G):
     if not G.is_directed():
         raise nx.NetworkXError("is_aperiodic not defined for undirected graphs")
 
-    s = next(G.nodes_iter())
+    s = next(G.nodes())
     levels = {s:0}
     this_level = [s]
     g = 0

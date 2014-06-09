@@ -205,7 +205,7 @@ def parse_edgelist(lines, comments='#', delimiter=None,
     ...          "2 3",
     ...          "3 4"]
     >>> G = nx.parse_edgelist(lines, nodetype = int)
-    >>> G.nodes()
+    >>> sorted(G)
     [1, 2, 3, 4]
     >>> G.edges()
     [(1, 2), (2, 3), (3, 4)]
@@ -216,7 +216,7 @@ def parse_edgelist(lines, comments='#', delimiter=None,
     ...          "2 3 {'weight':27}",
     ...          "3 4 {'weight':3.0}"]
     >>> G = nx.parse_edgelist(lines, nodetype = int)
-    >>> G.nodes()
+    >>> sorted(G)
     [1, 2, 3, 4]
     >>> G.edges(data = True)
     [(1, 2, {'weight': 3}), (2, 3, {'weight': 27}), (3, 4, {'weight': 3.0})]
@@ -227,7 +227,7 @@ def parse_edgelist(lines, comments='#', delimiter=None,
     ...          "2 3 27",
     ...          "3 4 3.0"]
     >>> G = nx.parse_edgelist(lines, nodetype = int, data=(('weight',float),))
-    >>> G.nodes()
+    >>> sorted(G)
     [1, 2, 3, 4]
     >>> G.edges(data = True)
     [(1, 2, {'weight': 3.0}), (2, 3, {'weight': 27.0}), (3, 4, {'weight': 3.0})]
@@ -347,7 +347,7 @@ def read_edgelist(path, comments="#", delimiter=None, create_using=None,
     >>> d = fh.write(textline)
     >>> fh.close()
     >>> G = nx.read_edgelist('test.edgelist', nodetype=int, data=(('weight',float),))
-    >>> G.nodes()
+    >>> sorted(G)
     [1, 2]
     >>> G.edges(data = True)
     [(1, 2, {'weight': 3.0})]

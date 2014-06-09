@@ -15,7 +15,7 @@ __author__ = """\n""".join(['Aric Hagberg (hagberg@lanl.gov)',
                             'Dan Schult(dschult@colgate.edu)'])
 __all__ = ['nodes', 'edges', 'degree', 'degree_histogram', 'neighbors',
            'number_of_nodes', 'number_of_edges', 'density',
-           'nodes_iter', 'edges_iter', 'is_directed', 'info',
+           'edges_iter', 'is_directed', 'info',
            'freeze', 'is_frozen', 'subgraph', 'create_empty_copy',
            'set_node_attributes', 'get_node_attributes',
            'set_edge_attributes', 'get_edge_attributes',
@@ -24,13 +24,8 @@ __all__ = ['nodes', 'edges', 'degree', 'degree_histogram', 'neighbors',
 
 
 def nodes(G):
-    """Return a copy of the graph nodes in a list."""
-    return G.nodes()
-
-
-def nodes_iter(G):
     """Return an iterator over the graph nodes."""
-    return G.nodes_iter()
+    return G.nodes()
 
 
 def edges(G, nbunch=None):
@@ -493,12 +488,12 @@ def non_edges(graph):
         Iterator of edges that are not in the graph.
     """
     if graph.is_directed():
-        for u in graph.nodes_iter():
+        for u in graph:
             for v in non_neighbors(graph, u):
                 yield (u, v)
     else:
         S = set()
-        for u in graph.nodes_iter():
+        for u in graph:
             for v in non_neighbors(graph, u):
                 if (u, v) not in S:
                     yield (u, v)

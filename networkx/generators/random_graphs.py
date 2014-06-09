@@ -275,7 +275,7 @@ def gnm_random_graph(n, m, seed=None, directed=False):
     if m>=max_edges:
         return complete_graph(n,create_using=G)
 
-    nlist=G.nodes()
+    nlist=list(G)
     edge_count=0
     while edge_count < m:
         # generate random edge,u,v
@@ -329,7 +329,7 @@ def newman_watts_strogatz_graph(n, k, p, seed=None):
         raise nx.NetworkXError("k>=n, choose smaller k or larger n")
     G=empty_graph(n)
     G.name="newman_watts_strogatz_graph(%s,%s,%s)"%(n,k,p)
-    nlist = G.nodes()
+    nlist = list(G)
     fromv = nlist
     # connect the k/2 neighbors
     for j in range(1, k // 2+1):
@@ -686,7 +686,7 @@ def powerlaw_cluster_graph(n, m, p, seed=None):
 
     G=empty_graph(m) # add m initial nodes (m0 in barabasi-speak)
     G.name="Powerlaw-Cluster Graph"
-    repeated_nodes=G.nodes()  # list of existing nodes to sample from
+    repeated_nodes=list(G)  # list of existing nodes to sample from
                            # with nodes repeated once for each adjacent edge
     source=m               # next node is m
     while source<n:        # Now add the other n-1 nodes
@@ -799,8 +799,8 @@ def random_shell_graph(constructor, seed=None):
 
     # connect the shells randomly
     for gi in range(len(glist)-1):
-        nlist1=glist[gi].nodes()
-        nlist2=glist[gi+1].nodes()
+        nlist1=list(glist[gi])
+        nlist2=list(glist[gi+1])
         total_edges=intra_edges[gi]
         edge_count=0
         while edge_count < total_edges:

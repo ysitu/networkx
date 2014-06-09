@@ -82,11 +82,9 @@ def test_planted_partition_graph():
 def test_relaxed_caveman_graph():
     G = nx.relaxed_caveman_graph(4,3,0)
     assert_equal(len(G),12)
-    assert_equal(len(G.nodes()),12)
     
     G = nx.relaxed_caveman_graph(4,3,1)
     assert_equal(len(G),12)
-    assert_equal(len(G.nodes()),12)
 
     G = nx.relaxed_caveman_graph(4,3,0.5)
     assert_equal(len(G),12)
@@ -95,7 +93,6 @@ def test_relaxed_caveman_graph():
 def test_connected_caveman_graph():
     G = nx.connected_caveman_graph(4,3)
     assert_equal(len(G),12)
-    assert_equal(len(G.nodes()),12)
     
     G = nx.connected_caveman_graph(1,5)
     K5 = nx.complete_graph(5)
@@ -105,7 +102,6 @@ def test_connected_caveman_graph():
 def test_caveman_graph():
     G = nx.caveman_graph(4,3)
     assert_equal(len(G),12)
-    assert_equal(len(G.nodes()),12)
     
     G = nx.caveman_graph(1,5)
     K5 = nx.complete_graph(5)

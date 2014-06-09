@@ -12,7 +12,7 @@ class TestRelabel():
         G=empty_graph()
         H=convert_node_labels_to_integers(G,100)
         assert_equal(H.name, '(empty_graph(0))_with_int_labels')
-        assert_equal(H.nodes(), [])
+        assert_equal(list(H), [])
         assert_equal(H.edges(), [])
 
         for opt in ["default", "sorted", "increasing degree",
@@ -20,7 +20,7 @@ class TestRelabel():
             G=empty_graph()
             H=convert_node_labels_to_integers(G,100, ordering=opt)
             assert_equal(H.name, '(empty_graph(0))_with_int_labels')
-            assert_equal(H.nodes(), [])
+            assert_equal(list(H), [])
             assert_equal(H.edges(), [])
 
         G=empty_graph()
@@ -35,7 +35,7 @@ class TestRelabel():
         degH=H.degree().values()
         degG=G.degree().values()
         assert_equal(sorted(degH), sorted(degG))
-        assert_equal(H.nodes(), [1000, 1001, 1002, 1003])
+        assert_equal(sorted(H.nodes()), [1000, 1001, 1002, 1003])
 
         H=convert_node_labels_to_integers(G,ordering="increasing degree")
         degH=H.degree().values()

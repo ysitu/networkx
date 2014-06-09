@@ -92,6 +92,7 @@ def betweenness_centrality_subset(G,sources,targets,
        http://www.inf.uni-konstanz.de/algo/publications/b-vspbc-08.pdf
     """
     b=dict.fromkeys(G,0.0) # b[v]=0 for v in G
+    targets = list(targets)
     for s in sources:
         # single source shortest paths
         if weight is None:  # use BFS

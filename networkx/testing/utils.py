@@ -5,6 +5,8 @@ __all__ = ['assert_nodes_equal', 'assert_edges_equal','assert_graphs_equal']
 def assert_nodes_equal(nlist1, nlist2):
     # Assumes lists are either nodes, or (node,datadict) tuples,
     # and also that nodes are orderable/sortable.
+    nlist1 = list(nlist1)
+    nlist2 = list(nlist2)
     try:
         l = len(nlist1[0])
         n1 = sorted(nlist1,key=operator.itemgetter(0))

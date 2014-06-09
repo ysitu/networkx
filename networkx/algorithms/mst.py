@@ -185,11 +185,11 @@ def prim_mst_edges(G, weight='weight', data=True):
     push = heappush
     pop = heappop
 
-    nodes = G.nodes()
+    nodes = set(G)
     c = count()
 
     while nodes:
-        u = nodes.pop(0)
+        u = nodes.pop()
         frontier = []
         visited = [u]
         for u, v in G.edges(u):

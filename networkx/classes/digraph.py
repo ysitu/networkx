@@ -117,7 +117,7 @@ class DiGraph(Graph):
     {'time': '5pm'}
     >>> G.node[1]['room'] = 714
     >>> del G.node[1]['room'] # remove attribute
-    >>> G.nodes(data=True)
+    >>> sorted(G.nodes(data=True))
     [(1, {'time': '5pm'}), (3, {'time': '2pm'})]
 
     Warning: adding a node to G.node does not add it to the graph.
@@ -401,11 +401,11 @@ class DiGraph(Graph):
         --------
         >>> G = nx.Graph()   # or DiGraph, MultiGraph, MultiDiGraph, etc
         >>> G.add_path([0,1,2])
-        >>> e = G.nodes()
+        >>> e = sorted(G)
         >>> e
         [0, 1, 2]
         >>> G.remove_nodes_from(e)
-        >>> G.nodes()
+        >>> list(G)
         []
 
         """
@@ -1025,7 +1025,7 @@ class DiGraph(Graph):
         >>> G = nx.Graph()   # or DiGraph, MultiGraph, MultiDiGraph, etc
         >>> G.add_path([0,1,2,3])
         >>> G.clear()
-        >>> G.nodes()
+        >>> list(G)
         []
         >>> G.edges()
         []

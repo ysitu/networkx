@@ -18,8 +18,8 @@ class TestFunction(object):
         self.DGedges = [(0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2)]
 
     def test_nodes(self):
-        assert_equal(self.G.nodes(), nx.nodes(self.G))
-        assert_equal(self.DG.nodes(), nx.nodes(self.DG))
+        assert_equal(list(self.G.nodes()), list(nx.nodes(self.G)))
+        assert_equal(list(self.DG.nodes()), list(nx.nodes(self.DG)))
 
     def test_edges(self):
         assert_equal(self.G.edges(), nx.edges(self.G))
@@ -28,10 +28,6 @@ class TestFunction(object):
             self.G.edges(nbunch=[0, 1, 3]), nx.edges(self.G, nbunch=[0, 1, 3]))
         assert_equal(
             self.DG.edges(nbunch=[0, 1, 3]), nx.edges(self.DG, nbunch=[0, 1, 3]))
-
-    def test_nodes_iter(self):
-        assert_equal(list(self.G.nodes_iter()), list(nx.nodes_iter(self.G)))
-        assert_equal(list(self.DG.nodes_iter()), list(nx.nodes_iter(self.DG)))
 
     def test_edges_iter(self):
         assert_equal(list(self.G.edges_iter()), list(nx.edges_iter(self.G)))
@@ -77,12 +73,12 @@ class TestFunction(object):
 
     def test_create_empty_copy(self):
         G = nx.create_empty_copy(self.G, with_nodes=False)
-        assert_equal(G.nodes(), [])
+        assert_equal(list(G), [])
         assert_equal(G.graph, {})
         assert_equal(G.node, {})
         assert_equal(G.edge, {})
         G = nx.create_empty_copy(self.G)
-        assert_equal(G.nodes(), self.G.nodes())
+        assert_equal(list(G.nodes()), list(self.G.nodes()))
         assert_equal(G.graph, {})
         assert_equal(G.node, {}.fromkeys(self.G.nodes(), {}))
         assert_equal(G.edge, {}.fromkeys(self.G.nodes(), {}))
@@ -163,13 +159,13 @@ class TestFunction(object):
 
     def test_neighbors(self):
         graph = nx.complete_graph(100)
-        pop = random.sample(graph.nodes(), 1)
+        pop = random.sample(list(graph), 1)
         nbors = list(nx.neighbors(graph, pop[0]))
         # should be all the other vertices in the graph
         assert_equal(len(nbors), len(graph) - 1)
 
         graph = nx.path_graph(100)
-        node = random.sample(graph.nodes(), 1)[0]
+        node = random.sample(list(graph), 1)[0]
         nbors = list(nx.neighbors(graph, node))
         # should be all the other vertices in the graph
         if node != 0 and node != 99:
@@ -184,13 +180,13 @@ class TestFunction(object):
 
     def test_non_neighbors(self):
         graph = nx.complete_graph(100)
-        pop = random.sample(graph.nodes(), 1)
+        pop = random.sample(list(graph), 1)
         nbors = list(nx.non_neighbors(graph, pop[0]))
         # should be all the other vertices in the graph
         assert_equal(len(nbors), 0)
 
         graph = nx.path_graph(100)
-        node = random.sample(graph.nodes(), 1)[0]
+        node = random.sample(list(graph), 1)[0]
         nbors = list(nx.non_neighbors(graph, node))
         # should be all the other vertices in the graph
         if node != 0 and node != 99:

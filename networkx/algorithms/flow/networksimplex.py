@@ -10,6 +10,7 @@ __author__ = """Loïc Séguin-C. <loicseguin@gmail.com>"""
 
 __all__ = ['network_simplex']
 
+from itertools import chain
 import networkx as nx
 from networkx.utils import generate_unique_node
 
@@ -23,12 +24,12 @@ def _initial_tree_solution(G, demand = 'demand', capacity = 'capacity',
     with negative demand. If these edges do not exist, we add them to
     the graph and call them artificial edges.
     """
-    H = nx.DiGraph((edge for edge in G.edges(data=True) if
+    H = nx.DiGraph((edge for edge in G.edges_iter(data=True) if
                     edge[2].get(capacity, 1) > 0))
-    demand_nodes = (node for node in G.nodes_iter(data=True) if
+    demand_nodes = (node for node in G.nodes(data=True) if
                     node[1].get(demand, 0) != 0)
     H.add_nodes_from(demand_nodes)
-    r = H.nodes()[0]
+    r = next(H.nodes())
 
     T = nx.DiGraph()
     y = {r: 0}
@@ -37,13 +38,13 @@ def _initial_tree_solution(G, demand = 'demand', capacity = 'capacity',
 
     n = H.number_of_nodes()
     try:
-        maxWeight = max(abs(d[weight]) for u, v, d in H.edges(data = True)
+        maxWeight = max(abs(d[weight]) for u, v, d in H.edges_iter(data=True)
                         if weight in d)
     except ValueError:
         maxWeight = 0
     hugeWeight = 1 + n * maxWeight
 
-    for v, d in H.nodes(data = True)[1:]:
+    for v, d in list(H.nodes(data=True))[1:]:
         vDemand = d.get(demand, 0)
         if vDemand >= 0:
             if not (r, v) in H.edges():
@@ -119,7 +120,7 @@ def _find_entering_edge(H, c, capacity = 'capacity'):
     main loop of the algorithm to terminate.
     """
     newEdge = ()
-    for u, v, d in H.edges_iter(data = True):
+    for u, v, d in H.edges_iter(data=True):
         if d.get('flow', 0) == 0:
             if c[(u, v)] < 0:
                 newEdge = (u, v)
@@ -205,7 +206,7 @@ def _create_flow_dict(G, H):
     """Creates the flow dict of dicts of graph G with auxiliary graph H."""
     flowDict = dict([(u, {}) for u in G])
 
-    for u in G.nodes_iter():
+    for u in G:
         for v in G.neighbors(u):
             if H.has_edge(u, v):
                 flowDict[u][v] = H[u][v].get('flow', 0)
@@ -369,8 +370,7 @@ def network_simplex(G, demand = 'demand', capacity = 'capacity',
         raise nx.NetworkXError("Not connected graph not supported.")
     if G.is_multigraph():
         raise nx.NetworkXError("MultiDiGraph not supported.")
-    if sum(d[demand] for v, d in G.nodes(data = True)
-           if demand in d) != 0:
+    if sum(d[demand] for v, d in G.nodes(data=True) if demand in d) != 0:
         raise nx.NetworkXUnfeasible("Sum of the demands should be 0.")
 
     # Fix an arbitrarily chosen root node and find an initial tree solution.
@@ -444,7 +444,7 @@ def network_simplex(G, demand = 'demand', capacity = 'capacity',
             else:
                 for index, u in enumerate(cycle[:-1]):
                     v = cycle[index + 1]
-                    if (u, v) in T.edges() + [newEdge]:
+                    if (u, v) in chain(T.edges_iter(), [newEdge]):
                         H[u][v]['flow'] = H[u][v].get('flow', 0) + eps
                     else: # (v, u) in T.edges():
                         H[v][u]['flow'] -= eps
@@ -458,16 +458,16 @@ def network_simplex(G, demand = 'demand', capacity = 'capacity',
             forest = nx.DiGraph(T)
             forest.remove_edge(*newEdge)
             R, notR = nx.connected_component_subgraphs(forest.to_undirected())
-            if r in notR.nodes(): # make sure r is in R
+            if r in notR: # make sure r is in R
                 R, notR = notR, R
-            if newEdge[0] in R.nodes():
-                for v in notR.nodes():
+            if newEdge[0] in R:
+                for v in notR:
                     y[v] += c[newEdge]
             else:
-                for v in notR.nodes():
+                for v in notR:
                     y[v] -= c[newEdge]
-            for u, v in H.edges():
-                if u in notR.nodes() or v in notR.nodes():
+            for u, v in H.edges_iter():
+                if u in notR or v in notR:
                     c[(u, v)] = H[u][v].get(weight, 0) + y[u] - y[v]
 
         # Print stuff for debugging.
@@ -496,7 +496,7 @@ def network_simplex(G, demand = 'demand', capacity = 'capacity',
             raise nx.NetworkXUnfeasible("No flow satisfying all demands.")
         H.remove_edge(u, v)
 
-    for u in H.nodes():
+    for u in list(H):
         if not u in G:
             H.remove_node(u)
 

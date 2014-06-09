@@ -218,6 +218,7 @@ def google_matrix(G, alpha=0.85, personalization=None,
 
     if nodelist is None:
         nodelist = G.nodes()
+    nodelist = list(nodelist)
 
     M = nx.to_numpy_matrix(G, nodelist=nodelist, weight=weight)
     N = len(G)
@@ -420,7 +421,7 @@ def pagerank_scipy(G, alpha=0.85, personalization=None,
     if N == 0:
         return {}
 
-    nodelist = G.nodes()
+    nodelist = list(G)
     M = nx.to_scipy_sparse_matrix(G, nodelist=nodelist, weight=weight,
                                   dtype=float)
     S = scipy.array(M.sum(axis=1)).flatten()

@@ -149,7 +149,7 @@ def is_connected(G):
     if len(G) == 0:
         raise nx.NetworkXPointlessConcept('Connectivity is undefined ',
                                           'for the null graph.')
-    return len(sp_length(G, next(G.nodes_iter()))) == len(G)
+    return len(sp_length(G, next(G.nodes()))) == len(G)
 
 @not_implemented_for('directed')
 def node_connected_component(G, n):

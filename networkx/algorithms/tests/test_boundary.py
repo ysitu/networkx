@@ -94,7 +94,7 @@ class TestBoundary:
         from random import sample
         P=nx.petersen_graph()
         def cheeger(G,k):
-            return min([float(len(nx.node_boundary(G,sample(G.nodes(),k))))/k 
+            return min([float(len(nx.node_boundary(G,sample(list(G),k))))/k
                         for n in range(100)])
 
         assert_almost_equals(cheeger(P,1),3.00,places=2)

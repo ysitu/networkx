@@ -109,7 +109,7 @@ class TestStronglyConnected:
         G.add_edge(2,1)
         scc = list(nx.strongly_connected_components(G))
         cG = nx.condensation(G, scc)
-        assert_equal(cG.nodes(),[0])
+        assert_equal(list(cG),[0])
         assert_equal(cG.edges(),[])
 
     def test_contract_scc_edge(self):
@@ -121,7 +121,7 @@ class TestStronglyConnected:
         G.add_edge(4,3)
         scc = list(nx.strongly_connected_components(G))
         cG = nx.condensation(G, scc)
-        assert_equal(cG.nodes(),[0,1])
+        assert_equal(sorted(cG.nodes()), [0, 1])
         if 1 in scc[0]:
             edge = (0,1)
         else:

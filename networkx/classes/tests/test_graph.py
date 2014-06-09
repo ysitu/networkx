@@ -21,12 +21,6 @@ class BaseGraphTester(object):
         assert_equal(G.order(), 3)
         assert_equal(G.number_of_nodes(), 3)
 
-    def test_nodes_iter(self):
-        G = self.K3
-        assert_equal(sorted(G.nodes_iter()), self.k3nodes)
-        assert_equal(
-            sorted(G.nodes_iter(data=True)), [(0, {}), (1, {}), (2, {})])
-
     def test_nodes(self):
         G = self.K3
         assert_equal(sorted(G.nodes()), self.k3nodes)
@@ -347,19 +341,19 @@ class BaseAttrGraphTester(BaseGraphTester):
     def test_node_attr(self):
         G = self.K3
         G.add_node(1, foo='bar')
-        assert_equal(G.nodes(), [0, 1, 2])
+        assert_equal(sorted(G.nodes()), [0, 1, 2])
         assert_equal(
-            G.nodes(data=True), [(0, {}), (1, {'foo': 'bar'}), (2, {})])
+            sorted(G.nodes(data=True)), [(0, {}), (1, {'foo': 'bar'}), (2, {})])
         G.node[1]['foo'] = 'baz'
         assert_equal(
-            G.nodes(data=True), [(0, {}), (1, {'foo': 'baz'}), (2, {})])
+            sorted(G.nodes(data=True)), [(0, {}), (1, {'foo': 'baz'}), (2, {})])
 
     def test_node_attr2(self):
         G = self.K3
         a = {'foo': 'bar'}
         G.add_node(3, attr_dict=a)
-        assert_equal(G.nodes(), [0, 1, 2, 3])
-        assert_equal(G.nodes(data=True),
+        assert_equal(sorted(G.nodes()), [0, 1, 2, 3])
+        assert_equal(sorted(G.nodes(data=True)),
                      [(0, {}), (1, {}), (2, {}), (3, {'foo': 'bar'})])
 
     def test_edge_attr(self):

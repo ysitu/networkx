@@ -365,6 +365,7 @@ def draw_networkx_nodes(G, pos,
 
     if nodelist is None:
         nodelist = G.nodes()
+    nodelist = list(nodelist)
 
     if not nodelist or len(nodelist) == 0:  # empty nodelist, no drawing
         return None
