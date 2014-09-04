@@ -1289,8 +1289,8 @@ class Graph(object):
         else:
             # edge weighted graph - degree is sum of nbr edge weights
             for n, nbrs in nodes_nbrs:
-                yield (n, sum((nbrs[nbr].get(weight, 1) for nbr in nbrs)) +
-                       (n in nbrs and nbrs[n].get(weight, 1)))
+                yield (n, (sum((nbrs[nbr].get(weight, 1) for nbr in nbrs)) +
+                           (n in nbrs and nbrs[n].get(weight, 1))))
 
     def clear(self):
         """Remove all nodes and edges from the graph.
@@ -1734,7 +1734,7 @@ class Graph(object):
 
         """
         nlist = list(nodes)
-        edges = zip(nlist, nlist[1:] + [nlist[0]])
+        edges = zip(nlist, nlist[1:] + nlist[:1])
         self.add_edges_from(edges, **attr)
 
     def nbunch_iter(self, nbunch=None):

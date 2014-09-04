@@ -539,18 +539,18 @@ class MultiDiGraph(MultiGraph, DiGraph):
 
         if weight is None:
             for (n, succ), (n2, pred) in nodes_nbrs:
-                indeg = sum([len(data) for data in pred.values()])
-                outdeg = sum([len(data) for data in succ.values()])
+                indeg = sum(len(data) for data in pred.values())
+                outdeg = sum(len(data) for data in succ.values())
                 yield (n, indeg + outdeg)
         else:
             # edge weighted graph - degree is sum of nbr edge weights
             for (n, succ), (n2, pred) in nodes_nbrs:
-                deg = sum([d.get(weight, 1)
-                           for data in pred.values()
-                           for d in data.values()])
-                deg += sum([d.get(weight, 1)
-                            for data in succ.values()
-                            for d in data.values()])
+                deg = sum(d.get(weight, 1)
+                          for data in pred.values()
+                          for d in data.values())
+                deg += sum(d.get(weight, 1)
+                           for data in succ.values()
+                           for d in data.values())
                 yield (n, deg)
 
     def in_degree_iter(self, nbunch=None, weight=None):
@@ -595,13 +595,13 @@ class MultiDiGraph(MultiGraph, DiGraph):
 
         if weight is None:
             for n, nbrs in nodes_nbrs:
-                yield (n, sum([len(data) for data in nbrs.values()]))
+                yield (n, sum(len(data) for data in nbrs.values()))
         else:
             # edge weighted graph - degree is sum of nbr edge weights
             for n, pred in nodes_nbrs:
-                deg = sum([d.get(weight, 1)
-                           for data in pred.values()
-                           for d in data.values()])
+                deg = sum(d.get(weight, 1)
+                          for data in pred.values()
+                          for d in data.values())
                 yield (n, deg)
 
     def out_degree_iter(self, nbunch=None, weight=None):
@@ -646,12 +646,12 @@ class MultiDiGraph(MultiGraph, DiGraph):
 
         if weight is None:
             for n, nbrs in nodes_nbrs:
-                yield (n, sum([len(data) for data in nbrs.values()]))
+                yield (n, sum(len(data) for data in nbrs.values()))
         else:
             for n, succ in nodes_nbrs:
-                deg = sum([d.get(weight, 1)
-                           for data in succ.values()
-                           for d in data.values()])
+                deg = sum(d.get(weight, 1)
+                          for data in succ.values()
+                          for d in data.values())
                 yield (n, deg)
 
     def is_multigraph(self):

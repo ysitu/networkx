@@ -735,17 +735,17 @@ class MultiGraph(Graph):
 
         if weight is None:
             for n, nbrs in nodes_nbrs:
-                deg = sum([len(data) for data in nbrs.values()])
+                deg = sum(len(data) for data in nbrs.values())
                 yield (n, deg + (n in nbrs and len(nbrs[n])))
         else:
             # edge weighted graph - degree is sum of nbr edge weights
             for n, nbrs in nodes_nbrs:
-                deg = sum([d.get(weight, 1)
-                           for data in nbrs.values()
-                           for d in data.values()])
+                deg = sum(d.get(weight, 1)
+                          for data in nbrs.values()
+                          for d in data.values())
                 if n in nbrs:
-                    deg += sum([d.get(weight, 1)
-                                for key, d in nbrs[n].items()])
+                    deg += sum(d.get(weight, 1)
+                               for key, d in nbrs[n].items())
                 yield (n, deg)
 
     def is_multigraph(self):

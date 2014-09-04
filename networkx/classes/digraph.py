@@ -833,8 +833,8 @@ class DiGraph(Graph):
             # edge weighted graph - degree is sum of edge weights
             for (n, succ), (n2, pred) in nodes_nbrs:
                 yield (n,
-                       sum((succ[nbr].get(weight, 1) for nbr in succ)) +
-                       sum((pred[nbr].get(weight, 1) for nbr in pred)))
+                       (sum((succ[nbr].get(weight, 1) for nbr in succ)) +
+                        sum((pred[nbr].get(weight, 1) for nbr in pred))))
 
     def in_degree_iter(self, nbunch=None, weight=None):
         """Return an iterator for (node, in-degree).

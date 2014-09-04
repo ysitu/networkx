@@ -326,7 +326,7 @@ def set_node_attributes(G, name, values):
         values.items
     except AttributeError:
         # Treat `value` as the attribute value for each node.
-        values = dict(zip(G.nodes(), [values] * len(G)))
+        values = {n: values for n in G}
 
     for node, value in values.items():
         G.node[node][name] = value
@@ -354,7 +354,7 @@ def get_node_attributes(G, name):
     >>> color[1]
     'red'
     """
-    return dict((n, d[name]) for n, d in G.node.items() if name in d)
+    return {n: d[name] for n, d in G.node.items() if name in d}
 
 
 def set_edge_attributes(G, name, values):
@@ -391,7 +391,7 @@ def set_edge_attributes(G, name, values):
             edges = G.edges(keys=True)
         else:
             edges = G.edges()
-        values = dict(zip(edges, [values] * len(edges)))
+        values = {e: values for e in edges}
 
     if G.is_multigraph():
         for (u, v, key), value in values.items():
@@ -429,7 +429,7 @@ def get_edge_attributes(G, name):
         edges = G.edges(keys=True, data=True)
     else:
         edges = G.edges(data=True)
-    return dict((x[:-1], x[-1][name]) for x in edges if name in x[-1])
+    return {x[:-1]: x[-1][name] for x in edges if name in x[-1]}
 
 
 def all_neighbors(graph, node):
